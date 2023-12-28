@@ -1,0 +1,19 @@
+<!-- Flaw 4, Cross-Site Scripting (XSS), row 2-->
+<h1>{{ question.question_text|safe }}</h1>
+
+<!-- Fix to flaw 4, remove |safe, row 5-->
+<!--<h1>{{ question.question_text }}</h1>-->
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+
+<form action="{% url 'polls:vote' question.id %}" method="post">
+<!-- Part of flaw 3, CSRF, token missing -->    
+
+<!-- Fix to flaw 3, add a token, row 13-->
+<!--{% csrf_token %}-->
+{% for choice in question.choice_set.all %}
+    <input type="radio" name="choice" id="choice{{ forloop.counter }}" value="{{ choice.id }}">
+    <label for="choice{{ forloop.counter }}">{{ choice.choice_text }}</label><br>
+{% endfor %}
+<input type="submit" value="Vote">
+</form>
